@@ -3,32 +3,40 @@ var nextButton = document.getElementById("next-btn");
 var questionContainer = document.getElementById("question-container");
 var questionElement = document.getElementById("question");
 var answerButtonElement = document.getElementById("answer-buttons");
-
+var minutesDisplay = document.querySelector("#minutes");
+var secondsDisplay = document.querySelector("#seconds");
+var workMinutesInput = document.querySelector("#work-minutes");
+var restMinutesInput = document.querySelector("#rest-minutes");
+//intialize variables
 var shuffledQuestion, currentQuestionI
+var totalSeconds = 0;
+var secondsElapsed = 0;
 
-
-
+//Click button to start
 startButton.addEventListener("click", startGame);
+//Once started, cycles through question
+//Randomizes all questions
 nextButton.addEventListener("click", ()=> {
     currentQuestionI++;
     selectNextQ();
 })
-
+//Starts Game
 function startGame(){
+    //hides start button to make room for questions
 startButton.classList.add('hide');
+//to randomize question order
 shuffledQuestion = questions.sort(() => Math.random() - .5);
 currentQuestionI = 0;
 questionContainer.classList.remove('hide');
 selectNextQ();
-
 }
-
+//gets random next question
 function selectNextQ(){
     resetState();
     showQuestion(shuffledQuestion[currentQuestionI]);
-
-
 }
+
+//gets question information for container
 function showQuestion(question){
     questionElement.innerText = question.question;
     question.answer.forEach(answer => {
@@ -43,7 +51,7 @@ function showQuestion(question){
         
     });
 }
-
+//removes answered question from array, so it doesnt repeat the same question
 function resetState(){
     clearStatusClass(document.body)
     nextButton.classList.add("hide");
@@ -52,7 +60,7 @@ function resetState(){
         (answerButtonElement.firstChild)
     }
 }
-
+//recieves user input for answer and gets response if its correct or incorrect
 function selectAnswer(e){
     var selectedButton = e.target;
     var correct = selectedButton.dataset.correct;
@@ -67,7 +75,7 @@ function selectAnswer(e){
         startButton.classList.remove("hide")
     }
 }
-
+//sets attributes to page for correct or incorrect answer
 function setStatusClass(element, correct){
     clearStatusClass (element)
     if(correct){
@@ -76,12 +84,59 @@ function setStatusClass(element, correct){
         element.classList.add("wrong")
     }
 }
+//removes set attribute for next question
 function clearStatusClass(element){
     element.classList.remove("correct")
     element.classList.remove("wrong")
 }
 
+// Timer Functions for when start
+function startTimer() {
+    setTime();
+    if (totalSeconds > 0) {
+       setInterval(function() {
+          secondsElapsed++;
+          renderTime();
+        }, 1000);
+    } 
+  }
+  function setTime() {
+    var minutes = 2;
+    totalSeconds = minutes * 60;
+  }
+  function renderTime() {
+    
+    minutesDisplay.textContent = getFormattedMinutes();
+    secondsDisplay.textContent = getFormattedSeconds();
+    
+    }
 
+    //to retrieve time formatted
+    function getFormattedMinutes() {
+    var secondsLeft = totalSeconds - secondsElapsed;
+    var minutesLeft = Math.floor(secondsLeft / 60);
+    var formattedMinutes;     
+        if (minutesLeft < 10) {
+          formattedMinutes = "0" + minutesLeft;
+        } else {
+          formattedMinutes = minutesLeft;
+        }
+        return formattedMinutes;
+      }
+      function getFormattedSeconds() {
+        var secondsLeft = (totalSeconds - secondsElapsed) % 60;
+        var formattedSeconds;
+        if (secondsLeft < 10) {
+          formattedSeconds = "0" + secondsLeft;
+        } else {
+          formattedSeconds = secondsLeft;
+        }
+        return formattedSeconds;
+      }
+    
+startButton.addEventListener("click", startTimer);
+
+//Array of questions set by Eddie
 var questions = [
     {
         question: "What is 2 + 2?", answer: [

@@ -28,6 +28,13 @@ body.wrong{
     --hue: var(--hue-wrong);
 
 }
+.container-time{
+    background-color: black;
+    color: aliceblue;
+    margin-top: -20%;
+    display: flex;
+    
+}
 .container{
     width: 800px;
     max-width: 80%;
