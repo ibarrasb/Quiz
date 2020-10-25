@@ -7,10 +7,13 @@ var minutesDisplay = document.querySelector("#minutes");
 var secondsDisplay = document.querySelector("#seconds");
 var workMinutesInput = document.querySelector("#work-minutes");
 var restMinutesInput = document.querySelector("#rest-minutes");
+var userS = document.querySelector("#user-score");
+var uScore = document.querySelector("#score-name");
 //intialize variables
 var shuffledQuestion, currentQuestionI
 var totalSeconds = 0;
 var secondsElapsed = 0;
+var userScore = 0;
 
 //Click button to start
 startButton.addEventListener("click", startGame);
@@ -28,13 +31,18 @@ startButton.classList.add('hide');
 shuffledQuestion = questions.sort(() => Math.random() - .5);
 currentQuestionI = 0;
 questionContainer.classList.remove('hide');
+
+    
+
 selectNextQ();
+
 }
 //gets random next question
 function selectNextQ(){
     resetState();
     showQuestion(shuffledQuestion[currentQuestionI]);
 }
+
 
 //gets question information for container
 function showQuestion(question){
@@ -44,7 +52,8 @@ function showQuestion(question){
         button.innerHTML = answer.text;
         button.classList.add("btn")
         if(answer.correct){
-            button.dataset.correct = answer.correct
+            button.dataset.correct = answer.correct;
+            console.log("right!");
         }
         button.addEventListener("click", selectAnswer)
         answerButtonElement.appendChild(button)
@@ -71,17 +80,32 @@ function selectAnswer(e){
     if (shuffledQuestion.length > currentQuestionI + 1){
         nextButton.classList.remove("hide")
     } else {
+        questionContainer.classList.remove("hide")
+        userS.classList.add("hide")
         startButton.innerHTML = "restart"
         startButton.classList.remove("hide")
+       
     }
 }
 //sets attributes to page for correct or incorrect answer
 function setStatusClass(element, correct){
+    // if(correct){
+    //     userScore ++;
+    //     console.log(userScore);
+        
+    // } else {
+    //     userScore --;
+    //     console.log(userScore);
+        
+    // }
+    
     clearStatusClass (element)
     if(correct){
         element.classList.add("correct")
+        
     } else {
         element.classList.add("wrong")
+        
     }
 }
 //removes set attribute for next question
@@ -101,7 +125,7 @@ function startTimer() {
     } 
   }
   function setTime() {
-    var minutes = 2;
+    var minutes = .5;
     totalSeconds = minutes * 60;
   }
   function renderTime() {
@@ -136,14 +160,22 @@ function startTimer() {
     
 startButton.addEventListener("click", startTimer);
 
+// if(totalSeconds === 0 || i >= questions.length){
+//     stopTimer();
+// } 
+
+// function stopTimer(){
+//     clearInterval(startTimer);
+// }
+
 //Array of questions set by Eddie
 var questions = [
     {
         question: "What is 2 + 2?", answer: [
             { text:"4", correct:true},
             { text:"2", correct:false},
-            { text:"2", correct:false},
-            { text:"2", correct:false}
+            { text:"5", correct:false},
+            { text:"10", correct:false}
         ]
     },
     {
